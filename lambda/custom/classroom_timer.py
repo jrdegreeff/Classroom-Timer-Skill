@@ -2,10 +2,12 @@
 
 # This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK.
 import logging
+import os
+
 from ask_sdk_s3.adapter import S3Adapter
 s3_adapter = S3Adapter(bucket_name=os.environ["S3_PERSISTENCE_BUCKET"])
 
-from ask_sdk_core.skill_builder import SkillBuilder
+from ask_sdk_core.skill_builder import CustomSkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
@@ -25,8 +27,11 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Hey friend, you can say sup or help me. Which would you like to try?"
-        handler_input.response_builder.speak(speech_text).ask(speech_text)
+        speech_text = "Welcome to Classroom Timer! I can start a timer, do this, or that. Which would you like me to " \
+                      "do?"
+        reprompt_text = "There are several things I can do. I can start a timer, do this, or that. Which would you " \
+                        "like me to do?"
+        handler_input.response_builder.speak(speech_text).ask(reprompt_text)
         return handler_input.response_builder.response
 
 
@@ -50,15 +55,37 @@ class CapturePreferencesIntentHandler(AbstractRequestHandler):
         return handler_input.response_builder.speak(speak_output).ask(next_prompt).response
 
 
-class HelloWorldIntentHandler(AbstractRequestHandler):
-    """Handler for Hello World Intent."""
+class StartTimerHandler(AbstractRequestHandler):
+    """Handler for Start Timer Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name("HelloWorldIntent")(handler_input)
+        return is_intent_name("StartTimerIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Hello World! Nathan made a change!"
+
+        slots = handler_input.request_envelope.request.intent.slots
+        duration = slots["time"].value
+        speech_text = "Would you like to start a timer for {} seconds?".format(duration)
+        reprompt_text = "Your timer for {} seconds is ready. Would you like to activate it?".format(duration)
+        handler_input.response_builder.speak(speech_text).ask(reprompt_text)
+        return handler_input.response_builder.response
+
+
+class ConfirmedStartTimerHandler(AbstractRequestHandler):
+    """Handler for Confirmed Start Timer Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("ConfirmedStartTimerIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Union[None, Response]
+        slots = handler_input.request_envelope.request.intent.slots
+        decision = slots["confirm"].value
+        if decision == "yes":
+            speech_text = "Started timer."
+        else:
+            speech_text = "Nevermind."
         handler_input.response_builder.speak(speech_text).set_should_end_session(True)
         return handler_input.response_builder.response
 
@@ -145,7 +172,8 @@ sb = CustomSkillBuilder(persistence_adapter=s3_adapter)
 
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(CapturePreferencesIntentHandler())
-sb.add_request_handler(HelloWorldIntentHandler())
+sb.add_request_handler(StartTimerHandler())
+sb.add_request_handler(ConfirmedStartTimerHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
