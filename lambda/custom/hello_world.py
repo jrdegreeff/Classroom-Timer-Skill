@@ -30,6 +30,26 @@ class LaunchRequestHandler(AbstractRequestHandler):
         return handler_input.response_builder.response
 
 
+class CapturePreferencesIntentHandler(AbstractRequestHandler):
+    """Handler for Capture Preferences Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("CapturePreferencesIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        slots = handler_input.request_envelope.request.intent.slots
+        attributes_manager = handler_input.attributes_manager
+        attributes_manager.persistent_attributes = {
+            # TODO: assign slots to attributes
+        }
+        attributes_manager.save_persistent_attributes()
+
+        speak_output = "placeholder"
+        next_prompt = "new question"
+        return handler_input.response_builder.speak(speak_output).ask(next_prompt).response
+
+
 class HelloWorldIntentHandler(AbstractRequestHandler):
     """Handler for Hello World Intent."""
     def can_handle(self, handler_input):
