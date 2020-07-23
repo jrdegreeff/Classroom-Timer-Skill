@@ -1,1 +1,2 @@
 ask-sdk-core==1.10.*
+ask-sdk-s3-persistence-adapter
