@@ -144,6 +144,7 @@ class ErrorHandler(AbstractExceptionHandler):
 sb = CustomSkillBuilder(persistence_adapter=s3_adapter)
 
 sb.add_request_handler(LaunchRequestHandler())
+sb.add_request_handler(CapturePreferencesIntentHandler())
 sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
