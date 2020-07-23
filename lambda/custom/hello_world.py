@@ -66,7 +66,7 @@ class StartTimerHandler(AbstractRequestHandler):
 
         slots = handler_input.request_envelope.request.intent.slots
         duration = slots["time"].value
-        speech_text = "Would you like to start a timer for {} seconds?".format(duration)
+        speech_text = "Got it. Would you like to start your timer for {} seconds?".format(duration)
         reprompt_text = "Your timer for {} seconds is ready. Would you like to activate it?".format(duration)
         handler_input.response_builder.speak(speech_text).ask(reprompt_text)
         return handler_input.response_builder.response
