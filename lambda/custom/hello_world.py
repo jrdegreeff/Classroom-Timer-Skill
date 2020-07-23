@@ -23,7 +23,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Welcome, you can say sup or Help. Which would you like to try?"
+        speech_text = "Hey friend, you can say sup or Help. Which would you like to try?"
         handler_input.response_builder.speak(speech_text).ask(speech_text)
         return handler_input.response_builder.response
 
