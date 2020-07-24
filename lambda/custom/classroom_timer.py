@@ -47,6 +47,7 @@ class CapturePreferencesIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         slots = handler_input.request_envelope.request.intent.slots
+        activity = slots["activity"].value
         attributes_manager = handler_input.attributes_manager
         attributes_manager.persistent_attributes = {
             "activity": slots["activity"].value
