@@ -38,21 +38,6 @@
                     ]
                 },
                 {
-                    "name": "ConfirmedStartTimerIntent",
-                    "slots": [
-                        {
-                            "name": "decision",
-                            "type": "YES_NO_TYPE",
-                            "samples": [
-                                "{decision}"
-                            ]
-                        }
-                    ],
-                    "samples": [
-                        "{decision}"
-                    ]
-                },
-                {
                     "name": "CapturePreferencesIntent",
                     "slots": [
                         {
@@ -72,36 +57,6 @@
                 }
             ],
             "types": [
-                {
-                    "name": "YES_NO_TYPE",
-                    "values": [
-                        {
-                            "name": {
-                                "value": "no",
-                                "synonyms": [
-                                    "i hate you",
-                                    "no thank you",
-                                    "nein",
-                                    "nope",
-                                    "nah"
-                                ]
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "yes",
-                                "synonyms": [
-                                    "okay",
-                                    "sure",
-                                    "yes please",
-                                    "yep",
-                                    "yup",
-                                    "yeah"
-                                ]
-                            }
-                        }
-                    ]
-                },
                 {
                     "name": "ACTIVITY_TYPE",
                     "values": [
@@ -157,22 +112,6 @@
                     ]
                 },
                 {
-                    "name": "ConfirmedStartTimerIntent",
-                    "confirmationRequired": false,
-                    "prompts": {},
-                    "slots": [
-                        {
-                            "name": "decision",
-                            "type": "YES_NO_TYPE",
-                            "confirmationRequired": false,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "elicitation": "Elicit.Slot.269530704123.1454718049970"
-                            }
-                        }
-                    ]
-                },
-                {
                     "name": "CapturePreferencesIntent",
                     "confirmationRequired": false,
                     "prompts": {},
@@ -207,15 +146,6 @@
                     {
                         "type": "PlainText",
                         "value": "Would you like me to play music, say some cool CS facts, or do nothing during brain break periods?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.269530704123.1454718049970",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Would you like me to start your timer?"
                     }
                 ]
             }
