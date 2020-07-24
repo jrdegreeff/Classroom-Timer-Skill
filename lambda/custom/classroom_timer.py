@@ -23,21 +23,25 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Welcome, you can say Hello or Help. Which would you like to try?"
-        handler_input.response_builder.speak(speech_text).ask(speech_text)
+        speech_text = "Welcome to Classroom Timer! I can start a timer, do this, or that. Which would you like me to do?"
+        reprompt_text = "There are several things I can do. I can start a timer, do this, or that. Which would you like me to do?"
+        handler_input.response_builder.speak(speech_text).ask(reprompt_text)
         return handler_input.response_builder.response
 
 
-class HelloWorldIntentHandler(AbstractRequestHandler):
-    """Handler for Hello World Intent."""
+class StartTimerHandler(AbstractRequestHandler):
+    """Handler for Start Timer Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name("HelloWorldIntent")(handler_input)
+        return is_intent_name("StartTimerIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Hello World!"
-        handler_input.response_builder.speak(speech_text).set_should_end_session(True)
+
+        slots = handler_input.request_envelope.request.intent.slots
+        duration = int(slots["time"].value)
+        speech_text = f"Got it. Starting your timer for {duration} seconds."
+        handler_input.response_builder.speak(speech_text)
         return handler_input.response_builder.response
 
 
@@ -121,7 +125,7 @@ class ErrorHandler(AbstractExceptionHandler):
 # defined are included below. The order matters - they're processed top to bottom.
 sb = SkillBuilder()
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(HelloWorldIntentHandler())
+sb.add_request_handler(StartTimerHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
