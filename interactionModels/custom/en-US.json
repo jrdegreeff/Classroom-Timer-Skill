@@ -46,7 +46,63 @@
 
                     ]
 
+                },
+                {
+                    "name": "CapturePreferencesIntent",
+                    "slots": [
+                        {
+                            "name": "activity",
+                            "type": "LIST_OF_ACTIVITIES",
+                            "samples": [
+                                "to {activity}",
+                                "{activity}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Set classroom preferences",
+                        "I want to set my classroom timer preferences",
+                        "Set classroom timer preferences",
+                        "Set classroom preference to {activity}"
+                    ]
                 }
+            ],
+            "types": [
+                {"name": "LIST_OF_ACTIVITIES",
+                "values": [
+                    {
+                        "id": "MUSIC",
+                        "name": {
+                            "value": "play music",
+                            "synonyms": [
+                                "music",
+                                "play nice music"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "FACT",
+                        "name": {
+                            "value": "fun facts",
+                            "synonyms": [
+                                "cs facts",
+                                "tell me cool facts",
+                                "tell facts"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "OFF",
+                        "name": {
+                            "value": "off",
+                            "synonyms": [
+                                "do nothing",
+                                "none"
+                            ]
+                        }
+                    }
+                ]
+            }
             ]
         }
     }
