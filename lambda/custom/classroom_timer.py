@@ -27,19 +27,21 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        attr = handler_input.attributes_manager.persistent_attributes
-        if "activity" in attr:
-            speech_text = "Welcome to Classroom Timer! I can start a timer, do this, or that. Which would you like me to do?"
-            reprompt_text = "There are several things I can do. I can start a timer, do this, or that. Which would you like me to do?"
-        else:
-            speech_text = "[LONG INTRO] Let's set your break activity preference. You can choose music, facts, or silence. Which would you like?"
-            reprompt_text = "What break activity would you like? You can choose music, facts, or silence."
+        # attr = handler_input.attributes_manager.persistent_attributes
+        # if "activity" in attr:
+        #     speech_text = "Welcome to Classroom Timer! I can start a timer, do this, or that. Which would you like me to do?"
+        #    reprompt_text = "There are several things I can do. I can start a timer, do this, or that. Which would you like me to do?"
+        # else:
+        #    speech_text = "[LONG INTRO] Let's set your break activity preference. You can choose music, facts, or silence. Which would you like?"
+        #    reprompt_text = "What break activity would you like? You can choose music, facts, or silence."
+        speech_text = "Welcome"
+        reprompt_text = "hello"
         handler_input.response_builder.speak(speech_text).ask(reprompt_text)
         return handler_input.response_builder.response
 
 
 class CapturePreferencesIntentHandler(AbstractRequestHandler):
-    """Handler for Capture Preferences Intent."""
+    """Handler for Capture Preferences Intent"""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_intent_name("CapturePreferencesIntent")(handler_input)
@@ -54,8 +56,7 @@ class CapturePreferencesIntentHandler(AbstractRequestHandler):
         }
         attributes_manager.save_persistent_attributes()
 
-        speak_output = f"Great. I've set your preference for break activity to {activity}. If you want to change it " \
-                       f"later you can say set break preference. "
+        speak_output = f"Great. I've set your preference for break activity to {activity}. If you want to change it later you can say set break preference. "
         return handler_input.response_builder.speak(speak_output).response
 
 
@@ -186,3 +187,6 @@ sb.add_request_handler(IntentReflectorHandler()) # make sure IntentReflectorHand
 sb.add_exception_handler(ErrorHandler())
 
 handler = sb.lambda_handler()
+
+if __name__ == "__main__":
+    LaunchRequestHandler().handle(None)
