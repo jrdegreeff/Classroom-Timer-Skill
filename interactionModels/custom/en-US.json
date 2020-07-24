@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "hello python",
+            "invocationName": "classroom timer",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -27,9 +27,20 @@
                         "say hello world",
                         "say hello"
                     ]
+                },
+                {
+                    "name": "StartTimerIntent",
+                    "slots": [{"name": "time", "type": "AMAZON.DURATION", "required": true}],
+                    "samples": [
+                        "create a {time} minute timer",
+                        "create a timer",
+
+
+                    ]
+
                 }
             ],
-            "types": []
+            "types": ["AMAZON.DURATION"]
         }
     }
 }
