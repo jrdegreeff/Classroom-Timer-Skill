@@ -30,17 +30,24 @@
                 },
                 {
                     "name": "StartTimerIntent",
-                    "slots": [{"name": "time", "type": "AMAZON.DURATION", "required": true}],
+                    "slots": [
+                        {"name": "time", 
+                        "type": "AMAZON.NUMBER", 
+                        "samples": [
+                            "Start a {time} minute classroom timer",
+                            "{time} minute"
+                        ]
+                    }],
                     "samples": [
                         "create a {time} minute timer",
-                        "create a timer",
-
+                        "Start a {time} minute classroom timer",
+                        "Start up a classroom timer for {time}",
+                        "create a timer"
 
                     ]
 
                 }
-            ],
-            "types": ["AMAZON.DURATION"]
+            ]
         }
     }
 }
