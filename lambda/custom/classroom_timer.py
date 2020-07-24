@@ -8,6 +8,7 @@ from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
+from ask_sdk_model.services.api_configuration import ApiConfiguration
 from ask_sdk_model.services.service_client_factory import ServiceClientFactory
 import ask_sdk_model.services.timer_management as timer
 
@@ -45,7 +46,7 @@ class StartTimerHandler(AbstractRequestHandler):
         speech_text = f"Got it. Starting your timer for {duration} seconds."
 
         try:
-            clientFactory = ServiceClientFactory()
+            clientFactory = ServiceClientFactory(ApiConfiguration())
             timerClient = clientFactory.get_timer_management_service()
             timerClient.create_timer(timer.timer_request.TimerRequest(
                 duration=f"PT{duration}S",
