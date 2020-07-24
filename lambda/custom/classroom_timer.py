@@ -3,12 +3,15 @@
 # This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK.
 import logging
 
+from ask_sdk_model.services import ApiConfiguration
 from ask_sdk_s3.adapter import S3Adapter
 s3_adapter = S3Adapter(bucket_name="aws-codestar-us-west-2-051805255583")
 
 from ask_sdk_core.skill_builder import CustomSkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
+from ask_sdk_core.serialize import DefaultSerializer
+from ask_sdk_core.api_client import DefaultApiClient
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model.services.service_client_factory import ServiceClientFactory
@@ -59,6 +62,7 @@ class StartTimerHandler(AbstractRequestHandler):
     """Handler for Start Timer Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
+        attr = handler_input.attributes_manager.persistent_attributes
         return is_intent_name("StartTimerIntent")(handler_input)
 
     def handle(self, handler_input):
@@ -69,7 +73,13 @@ class StartTimerHandler(AbstractRequestHandler):
         speech_text = f"Got it. Starting your timer for {duration} seconds."
 
         try:
-            clientFactory = ServiceClientFactory(ApiConfiguration())
+            sys_object = handler_input.request_envelope.context.system
+            clientFactory = ServiceClientFactory(ApiConfiguration(
+                authorization_value=sys_object.api_access_token,
+                api_endpoint=sys_object.api_endpoint,
+                serializer=DefaultSerializer(),
+                api_client=DefaultApiClient()
+            ))
             timerClient = clientFactory.get_timer_management_service()
             timerClient.create_timer(timer.timer_request.TimerRequest(
                 duration=f"PT{duration}S",
