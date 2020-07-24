@@ -45,7 +45,8 @@ class StartTimerHandler(AbstractRequestHandler):
         speech_text = f"Got it. Starting your timer for {duration} seconds."
 
         try:
-            timerClient = ServiceClientFactory.get_timer_management_service()
+            clientFactory = ServiceClientFactory()
+            timerClient = clientFactory.get_timer_management_service()
             timerClient.create_timer(timer.timer_request.TimerRequest(
                 duration=f"PT{duration}S",
                 timer_label="independent",
