@@ -53,7 +53,8 @@ class CapturePreferencesIntentHandler(AbstractRequestHandler):
         }
         attributes_manager.save_persistent_attributes()
 
-        speak_output = f"Great. I've set your preference for break activity to {activity}. If you want to change it later you can say set break preference."
+        speak_output = f"Great. I've set your preference for break activity to {activity}. If you want to change it " \
+                       f"later you can say set break preference. "
         return handler_input.response_builder.speak(speak_output).response
 
 
