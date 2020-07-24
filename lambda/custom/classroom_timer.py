@@ -49,7 +49,7 @@ class CapturePreferencesIntentHandler(AbstractRequestHandler):
         slots = handler_input.request_envelope.request.intent.slots
         attributes_manager = handler_input.attributes_manager
         attributes_manager.persistent_attributes = {
-            "activity" = slots["activity"].value
+            "activity": slots["activity"].value
         }
         attributes_manager.save_persistent_attributes()
 
@@ -67,7 +67,7 @@ class StartTimerHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
 
         slots = handler_input.request_envelope.request.intent.slots
-        duration = slots["time"].value
+        duration = int(slots["time"].value)
         speech_text = f"Got it. Would you like to start your timer for {duration} seconds?"
         reprompt_text = f"Your timer for {duration} seconds is ready. Would you like to activate it?"
         handler_input.response_builder.speak(speech_text).ask(reprompt_text)
@@ -81,9 +81,9 @@ class ConfirmedStartTimerHandler(AbstractRequestHandler):
         return is_intent_name("ConfirmedStartTimerIntent")(handler_input)
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Union[None, Response]
+        # type: (HandlerInput) -> Response
         slots = handler_input.request_envelope.request.intent.slots
-        decision = slots["confirm"].value
+        decision = slots["decision"].value
         if decision == "yes":
             speech_text = "Started timer."
         else:

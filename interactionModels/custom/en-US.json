@@ -31,21 +31,36 @@
                 {
                     "name": "StartTimerIntent",
                     "slots": [
-                        {"name": "time", 
-                        "type": "AMAZON.NUMBER", 
-                        "samples": [
-                            "Start a {time} minute classroom timer",
-                            "{time} minute"
-                        ]
-                    }],
+                        {
+                            "name": "time",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "Start a {time} minute classroom timer",
+                                "{time} minute"
+                            ]
+                        }
+                    ],
                     "samples": [
                         "create a {time} minute timer",
                         "Start a {time} minute classroom timer",
                         "Start up a classroom timer for {time}",
                         "create a timer"
-
                     ]
-
+                },
+                {
+                    "name": "ConfirmedStartTimerIntent",
+                    "slots": [
+                        {
+                            "name": "decision",
+                            "type": "YES_NO_TYPE",
+                            "samples": [
+                                "{decision}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "{decision}"
+                    ]
                 },
                 {
                     "name": "CapturePreferencesIntent",
@@ -68,41 +83,74 @@
                 }
             ],
             "types": [
-                {"name": "LIST_OF_ACTIVITIES",
-                "values": [
-                    {
-                        "id": "MUSIC",
-                        "name": {
-                            "value": "play music",
-                            "synonyms": [
-                                "music",
-                                "play nice music"
-                            ]
+                {
+                    "name": "LIST_OF_ACTIVITIES",
+                    "values": [
+                        {
+                            "id": "MUSIC",
+                            "name": {
+                                "value": "play music",
+                                "synonyms": [
+                                    "music",
+                                    "play nice music"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "FACT",
+                            "name": {
+                                "value": "fun facts",
+                                "synonyms": [
+                                    "cs facts",
+                                    "tell me cool facts",
+                                    "tell facts"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "OFF",
+                            "name": {
+                                "value": "off",
+                                "synonyms": [
+                                    "do nothing",
+                                    "none"
+                                ]
+                            }
                         }
-                    },
-                    {
-                        "id": "FACT",
-                        "name": {
-                            "value": "fun facts",
-                            "synonyms": [
-                                "cs facts",
-                                "tell me cool facts",
-                                "tell facts"
-                            ]
+                    ]
+                },
+                {
+                    "name": "YES_NO_TYPE",
+                    "values": [
+                        {
+                            "id": "YES",
+                            "name": {
+                                "value": "yes",
+                                "synonyms": [
+                                    "yeah",
+                                    "yup",
+                                    "yep",
+                                    "yes please",
+                                    "sure",
+                                    "okay"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "NO",
+                            "name": {
+                                "value": "no",
+                                "synonyms": [
+                                    "nah",
+                                    "nope",
+                                    "nein",
+                                    "no thank you",
+                                    "i hate you"
+                                ]
+                            }
                         }
-                    },
-                    {
-                        "id": "OFF",
-                        "name": {
-                            "value": "off",
-                            "synonyms": [
-                                "do nothing",
-                                "none"
-                            ]
-                        }
-                    }
-                ]
-            }
+                    ]
+                }
             ]
         }
     }
