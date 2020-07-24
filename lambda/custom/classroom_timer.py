@@ -27,10 +27,13 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Welcome to Classroom Timer! I can start a timer, do this, or that. Which would you like me to " \
-                      "do?"
-        reprompt_text = "There are several things I can do. I can start a timer, do this, or that. Which would you " \
-                        "like me to do?"
+        attr = handler_input.attributes_manager.persistent_attributes
+        if "activity" in attr:
+            speech_text = "Welcome to Classroom Timer! I can start a timer, do this, or that. Which would you like me to do?"
+            reprompt_text = "There are several things I can do. I can start a timer, do this, or that. Which would you like me to do?"
+        else:
+            speech_text = "[LONG INTRO] Let's set your break activity preference. You can choose music, facts, or silence. Which would you like?"
+            reprompt_text = "What break activity would you like? You can choose music, facts, or silence."
         handler_input.response_builder.speak(speech_text).ask(reprompt_text)
         return handler_input.response_builder.response
 
@@ -46,13 +49,12 @@ class CapturePreferencesIntentHandler(AbstractRequestHandler):
         slots = handler_input.request_envelope.request.intent.slots
         attributes_manager = handler_input.attributes_manager
         attributes_manager.persistent_attributes = {
-            # TODO: assign slots to attributes
+            "activity" = slots["activity"].value
         }
         attributes_manager.save_persistent_attributes()
 
-        speak_output = "placeholder"
-        next_prompt = "new question"
-        return handler_input.response_builder.speak(speak_output).ask(next_prompt).response
+        speak_output = f"Great. I've set your preference for break activity to {activity}. If you want to change it later you can say set break preference."
+        return handler_input.response_builder.speak(speak_output).response
 
 
 class StartTimerHandler(AbstractRequestHandler):
@@ -66,8 +68,8 @@ class StartTimerHandler(AbstractRequestHandler):
 
         slots = handler_input.request_envelope.request.intent.slots
         duration = slots["time"].value
-        speech_text = "Got it. Would you like to start your timer for {} seconds?".format(duration)
-        reprompt_text = "Your timer for {} seconds is ready. Would you like to activate it?".format(duration)
+        speech_text = f"Got it. Would you like to start your timer for {duration} seconds?"
+        reprompt_text = f"Your timer for {duration} seconds is ready. Would you like to activate it?"
         handler_input.response_builder.speak(speech_text).ask(reprompt_text)
         return handler_input.response_builder.response
 
