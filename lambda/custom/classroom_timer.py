@@ -2,12 +2,8 @@
 
 # This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK.
 import logging
-import os
 
-from ask_sdk_s3.adapter import S3Adapter
-s3_adapter = S3Adapter(bucket_name=os.environ["S3_PERSISTENCE_BUCKET"])
-
-from ask_sdk_core.skill_builder import CustomSkillBuilder
+from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
@@ -27,70 +23,20 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        # attr = handler_input.attributes_manager.persistent_attributes
-        # if "activity" in attr:
-        #     speech_text = "Welcome to Classroom Timer! I can start a timer, do this, or that. Which would you like me to do?"
-        #    reprompt_text = "There are several things I can do. I can start a timer, do this, or that. Which would you like me to do?"
-        # else:
-        #    speech_text = "[LONG INTRO] Let's set your break activity preference. You can choose music, facts, or silence. Which would you like?"
-        #    reprompt_text = "What break activity would you like? You can choose music, facts, or silence."
-        speech_text = "Welcome"
-        reprompt_text = "hello"
-        handler_input.response_builder.speak(speech_text).ask(reprompt_text)
+        speech_text = "Welcome, you can say Hello or Help. Which would you like to try?"
+        handler_input.response_builder.speak(speech_text).ask(speech_text)
         return handler_input.response_builder.response
 
 
-class CapturePreferencesIntentHandler(AbstractRequestHandler):
-    """Handler for Capture Preferences Intent"""
+class HelloWorldIntentHandler(AbstractRequestHandler):
+    """Handler for Hello World Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name("CapturePreferencesIntent")(handler_input)
+        return is_intent_name("HelloWorldIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        slots = handler_input.request_envelope.request.intent.slots
-        activity = slots["activity"].value
-        attributes_manager = handler_input.attributes_manager
-        attributes_manager.persistent_attributes = {
-            "activity": slots["activity"].value
-        }
-        attributes_manager.save_persistent_attributes()
-
-        speak_output = f"Great. I've set your preference for break activity to {activity}. If you want to change it later you can say set break preference. "
-        return handler_input.response_builder.speak(speak_output).response
-
-
-class StartTimerHandler(AbstractRequestHandler):
-    """Handler for Start Timer Intent."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return is_intent_name("StartTimerIntent")(handler_input)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-
-        slots = handler_input.request_envelope.request.intent.slots
-        duration = int(slots["time"].value)
-        speech_text = f"Got it. Would you like to start your timer for {duration} seconds?"
-        reprompt_text = f"Your timer for {duration} seconds is ready. Would you like to activate it?"
-        handler_input.response_builder.speak(speech_text).ask(reprompt_text)
-        return handler_input.response_builder.response
-
-
-class ConfirmedStartTimerHandler(AbstractRequestHandler):
-    """Handler for Confirmed Start Timer Intent."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return is_intent_name("ConfirmedStartTimerIntent")(handler_input)
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        slots = handler_input.request_envelope.request.intent.slots
-        decision = slots["decision"].value
-        if decision == "yes":
-            speech_text = "Started timer."
-        else:
-            speech_text = "Nevermind."
+        speech_text = "Hello World!"
         handler_input.response_builder.speak(speech_text).set_should_end_session(True)
         return handler_input.response_builder.response
 
@@ -173,12 +119,9 @@ class ErrorHandler(AbstractExceptionHandler):
 # This handler acts as the entry point for your skill, routing all request and response
 # payloads to the handlers above. Make sure any new handlers or interceptors you've
 # defined are included below. The order matters - they're processed top to bottom.
-sb = CustomSkillBuilder(persistence_adapter=s3_adapter)
-
+sb = SkillBuilder()
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(CapturePreferencesIntentHandler())
-sb.add_request_handler(StartTimerHandler())
-sb.add_request_handler(ConfirmedStartTimerHandler())
+sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
@@ -187,6 +130,3 @@ sb.add_request_handler(IntentReflectorHandler()) # make sure IntentReflectorHand
 sb.add_exception_handler(ErrorHandler())
 
 handler = sb.lambda_handler()
-
-if __name__ == "__main__":
-    LaunchRequestHandler().handle(None)
