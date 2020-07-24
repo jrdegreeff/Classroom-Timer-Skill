@@ -2,13 +2,16 @@
 
 # This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK.
 import logging
+import os
 
-from ask_sdk_core.skill_builder import SkillBuilder
+from ask_sdk_s3.adapter import S3Adapter
+s3_adapter = S3Adapter(bucket_name=os.environ["S3_PERSISTENCE_BUCKET"])
+
+from ask_sdk_core.skill_builder import CustomSkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
-from ask_sdk_model.services.api_configuration import ApiConfiguration
 from ask_sdk_model.services.service_client_factory import ServiceClientFactory
 import ask_sdk_model.services.timer_management as timer
 
@@ -30,6 +33,27 @@ class LaunchRequestHandler(AbstractRequestHandler):
         reprompt_text = "There are several things I can do. I can start a timer, do this, or that. Which would you like me to do?"
         handler_input.response_builder.speak(speech_text).ask(reprompt_text)
         return handler_input.response_builder.response
+
+
+class CapturePreferencesIntentHandler(AbstractRequestHandler):
+    """Handler for Capture Preferences Intent"""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("CapturePreferencesIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        slots = handler_input.request_envelope.request.intent.slots
+        activity = slots["activity"].value
+
+        attributes_manager = handler_input.attributes_manager
+        attributes_manager.persistent_attributes = {
+            "activity": activity
+        }
+        attributes_manager.save_persistent_attributes()
+
+        speak_output = f"Great. I've set your preference for break activity to {activity}. If you want to change it later you can say set break preference."
+        return handler_input.response_builder.speak(speak_output).response
 
 
 class StartTimerHandler(AbstractRequestHandler):
@@ -142,8 +166,9 @@ class ErrorHandler(AbstractExceptionHandler):
 # This handler acts as the entry point for your skill, routing all request and response
 # payloads to the handlers above. Make sure any new handlers or interceptors you've
 # defined are included below. The order matters - they're processed top to bottom.
-sb = SkillBuilder()
+sb = CustomSkillBuilder(persistence_adapter=s3_adapter)
 sb.add_request_handler(LaunchRequestHandler())
+sb.add_request_handler(CapturePreferencesIntentHandler())
 sb.add_request_handler(StartTimerHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
