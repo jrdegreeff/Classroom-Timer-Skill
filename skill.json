@@ -5,11 +5,10 @@
         "en-US": {
           "summary": "A basic skill made from Alexa Skills Kit template",
           "examplePhrases": [
-            "Alexa open hello python",
-            "Alexa tell hello python hello",
-            "Alexa ask hello python say hello"
+            "Alexa open classroom timer",
+            "Alexa ask classroom timer to start a timer"
           ],
-          "name": "hello python",
+          "name": "classroom timer",
           "description": "A basic skill made from Alexa Skills Kit template"
         }
       },
