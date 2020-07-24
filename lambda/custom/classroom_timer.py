@@ -44,15 +44,19 @@ class StartTimerHandler(AbstractRequestHandler):
         duration = int(slots["time"].value)
         speech_text = f"Got it. Starting your timer for {duration} seconds."
 
-        timerClient = ServiceClientFactory.get_timer_management_service()
-        timerClient.create_timer(timer.timer_request.TimerRequest(
-            duration=f"PT{duration}S",
-            timer_label="independent",
-            triggering_behavior=timer.triggering_behavior.TriggeringBehavior(
-                "NOTIFY_ONLY",
-                timer.notification_config.NotificationConfig(True)
-            )
-        ))
+        try:
+            timerClient = ServiceClientFactory.get_timer_management_service()
+            timerClient.create_timer(timer.timer_request.TimerRequest(
+                duration=f"PT{duration}S",
+                timer_label="independent",
+                triggering_behavior=timer.triggering_behavior.TriggeringBehavior(
+                    timer.notify_only_operation.NotifyOnlyOperation(),
+                    timer.notification_config.NotificationConfig(True)
+                )
+            ))
+        except timer.Error:
+            handler_input.response_builder.speak("There was a problem connecting to the service")
+            return handler_input.response_builder.response
 
         handler_input.response_builder.speak(speech_text)
         return handler_input.response_builder.response
