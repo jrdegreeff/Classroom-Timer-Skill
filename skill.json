@@ -21,6 +21,7 @@
       "custom": {
       }
     },
-    "manifestVersion": "1.0"
+    "manifestVersion": "1.0",
+    "permissions": ["alexa::alerts:timers:skill:readwrite"]
   }
 }
