@@ -26,14 +26,14 @@
                             "name": "time",
                             "type": "AMAZON.NUMBER",
                             "samples": [
-                                "{time} minutes"
+                                "{time} seconds"
                             ]
                         }
                     ],
                     "samples": [
-                        "start up a classroom timer for {time} minutes",
-                        "create a {time} minute timer",
-                        "start a timer for {time} minutes",
+                        "start up a classroom timer for {time} seconds",
+                        "create a {time} second timer",
+                        "start a timer for {time} seconds",
                         "start a timer"
                     ]
                 },

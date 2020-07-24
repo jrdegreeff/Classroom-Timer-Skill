@@ -8,6 +8,8 @@ from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
+from ask_sdk_model.services.service_client_factory import ServiceClientFactory
+import ask_sdk_model.services.timer_management as timer
 
 from ask_sdk_model import Response
 
@@ -41,6 +43,17 @@ class StartTimerHandler(AbstractRequestHandler):
         slots = handler_input.request_envelope.request.intent.slots
         duration = int(slots["time"].value)
         speech_text = f"Got it. Starting your timer for {duration} seconds."
+
+        timerClient = ServiceClientFactory.get_timer_management_service()
+        timerClient.create_timer(timer.timer_request.TimerRequest(
+            duration=f"PT{duration}S",
+            timer_label="independent",
+            triggering_behavior=timer.triggering_behavior.TriggeringBehavior(
+                "NOTIFY_ONLY",
+                timer.notification_config.NotificationConfig(True)
+            )
+        ))
+
         handler_input.response_builder.speak(speech_text)
         return handler_input.response_builder.response
 
