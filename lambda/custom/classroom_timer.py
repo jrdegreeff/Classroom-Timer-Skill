@@ -56,7 +56,7 @@ class StartTimerHandler(AbstractRequestHandler):
                     timer.notification_config.NotificationConfig(True)
                 )
             ))
-        except timer.Error:
+        except Exception:
             handler_input.response_builder.speak("There was a problem connecting to the service")
             return handler_input.response_builder.response
 
