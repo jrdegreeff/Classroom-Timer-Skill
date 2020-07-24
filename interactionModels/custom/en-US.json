@@ -16,17 +16,8 @@
                     "samples": []
                 },
                 {
-                    "name": "HelloWorldIntent",
-                    "slots": [],
-                    "samples": [
-                        "hello",
-                        "how are you",
-                        "say hi world",
-                        "say hi",
-                        "hi",
-                        "say hello world",
-                        "say hello"
-                    ]
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
                 },
                 {
                     "name": "StartTimerIntent",
@@ -35,16 +26,15 @@
                             "name": "time",
                             "type": "AMAZON.NUMBER",
                             "samples": [
-                                "Start a {time} minute classroom timer",
-                                "{time} minute"
+                                "{time} minutes"
                             ]
                         }
                     ],
                     "samples": [
+                        "start up a classroom timer for {time} minutes",
                         "create a {time} minute timer",
-                        "Start a {time} minute classroom timer",
-                        "Start up a classroom timer for {time}",
-                        "create a timer"
+                        "start a timer for {time} minutes",
+                        "start a timer"
                     ]
                 },
                 {
@@ -67,7 +57,7 @@
                     "slots": [
                         {
                             "name": "activity",
-                            "type": "LIST_OF_ACTIVITIES",
+                            "type": "ACTIVITY_TYPE",
                             "samples": [
                                 "to {activity}",
                                 "{activity}"
@@ -75,83 +65,160 @@
                         }
                     ],
                     "samples": [
-                        "Set classroom preferences",
-                        "I want to set my classroom timer preferences",
-                        "Set classroom timer preferences",
-                        "Set classroom preference to {activity}"
+                        "set classroom timer preferences",
+                        "i want to set my classroom timer preferences",
+                        "set classroom preferences"
                     ]
                 }
             ],
             "types": [
                 {
-                    "name": "LIST_OF_ACTIVITIES",
+                    "name": "YES_NO_TYPE",
                     "values": [
                         {
-                            "id": "MUSIC",
                             "name": {
-                                "value": "play music",
+                                "value": "no",
                                 "synonyms": [
-                                    "music",
-                                    "play nice music"
+                                    "i hate you",
+                                    "no thank you",
+                                    "nein",
+                                    "nope",
+                                    "nah"
                                 ]
                             }
                         },
                         {
-                            "id": "FACT",
                             "name": {
-                                "value": "fun facts",
+                                "value": "yes",
                                 "synonyms": [
-                                    "cs facts",
-                                    "tell me cool facts",
-                                    "tell facts"
-                                ]
-                            }
-                        },
-                        {
-                            "id": "OFF",
-                            "name": {
-                                "value": "off",
-                                "synonyms": [
-                                    "do nothing",
-                                    "none"
+                                    "okay",
+                                    "sure",
+                                    "yes please",
+                                    "yep",
+                                    "yup",
+                                    "yeah"
                                 ]
                             }
                         }
                     ]
                 },
                 {
-                    "name": "YES_NO_TYPE",
+                    "name": "ACTIVITY_TYPE",
                     "values": [
                         {
-                            "id": "YES",
                             "name": {
-                                "value": "yes",
+                                "value": "off",
                                 "synonyms": [
-                                    "yeah",
-                                    "yup",
-                                    "yep",
-                                    "yes please",
-                                    "sure",
-                                    "okay"
+                                    "none",
+                                    "do nothing"
                                 ]
                             }
                         },
                         {
-                            "id": "NO",
                             "name": {
-                                "value": "no",
+                                "value": "facts",
                                 "synonyms": [
-                                    "nah",
-                                    "nope",
-                                    "nein",
-                                    "no thank you",
-                                    "i hate you"
+                                    "tell facts",
+                                    "tell me cool facts",
+                                    "cs facts"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "music",
+                                "synonyms": [
+                                    "play music",
+                                    "play nice music",
+                                    "music"
                                 ]
                             }
                         }
                     ]
                 }
             ]
-        }
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "StartTimerIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "time",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1300650393053.177304336284"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ConfirmedStartTimerIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "decision",
+                            "type": "YES_NO_TYPE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.269530704123.1454718049970"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "CapturePreferencesIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "activity",
+                            "type": "ACTIVITY_TYPE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.241186363667.223130136296"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1300650393053.177304336284",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "How long do you want the timer to be?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.241186363667.223130136296",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Would you like me to play music, say some cool CS facts, or do nothing during brain break periods?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.269530704123.1454718049970",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Would you like me to start your timer?"
+                    }
+                ]
+            }
+        ]
     }
 }
