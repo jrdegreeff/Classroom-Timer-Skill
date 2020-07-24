@@ -29,7 +29,7 @@ Resources:
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-CustomDefaultFunction'
       CodeUri: 'lambda/custom'
-      Handler: hello_world.handler
+      Handler: classroom_timer.handler
       Runtime: python3.7
       Role: !GetAtt LambdaExecutionRole.Arn
       Events:
